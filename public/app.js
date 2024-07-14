@@ -119,8 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Error:', error));
     });
 
-    // Function to display results
-    const displayResults = (data) => {
+     // Function to display results
+     const displayResults = (data) => {
         const resultsDiv = document.getElementById('results');
         resultsDiv.innerHTML = '<h2>Results</h2>';
         const table = document.createElement('table');
@@ -133,7 +133,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <th>Waiting Time</th>
             </tr>
         `;
+        let totalWaitingTime = 0;
+        let totalTurnaroundTime = 0;
         data.forEach((result) => {
+            totalWaitingTime += result.waitingTime;
+            totalTurnaroundTime += result.turnaroundTime;
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${result.processId}</td>
@@ -144,6 +148,18 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             table.appendChild(row);
         });
+        
+        const avgWaitingTime = (totalWaitingTime / data.length).toFixed(2);
+        const avgTurnaroundTime = (totalTurnaroundTime / data.length).toFixed(2);
+
+        const avgRow = document.createElement('tr');
+        avgRow.innerHTML = `
+            <td colspan="3"><strong>Average</strong></td>
+            <td>${avgTurnaroundTime}</td>
+            <td>${avgWaitingTime}</td>
+        `;
+        table.appendChild(avgRow);
+
         resultsDiv.appendChild(table);
     };
 
